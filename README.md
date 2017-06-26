@@ -1,0 +1,1 @@
+Playing around with [SnapSVG](http://snapsvg.io) JS framework.
