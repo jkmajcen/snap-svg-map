@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>SnapSVG Play</title>
+    <style media="screen">
+        #svg {
+            -moz-border-radius: 20px;
+            -webkit-border-radius: 20px;
+            border-radius: 20px;
+            border: solid 2px #ccc;
+            width: 700px;
+            height: 500px;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/snap.svg/0.5.1/snap.svg-min.js"></script>
+    <script>
+        var dominantMapColor = "gray";
+        var locationColor = "red";
+        var hoverColor = "orange";
+        var locations = ["CA.BC", "US.OR", "US.OH", "US.FL", "US.MO"]; //potentially a dynamic list
+
+        window.onload = function () {
+            var s = Snap("#svg");
+            Snap.load("hawthorne-map-nocolor.svg", function (f) {
+                var areas = f.selectAll("g");
+                areas.forEach(function (area) {
+                    colorizeArea(locations, area);
+                    setClickAction(area);
+                    setHoverStates(area);
+                }, this);
+                s.append(f);
+            });
+        };
+
+        function setHoverStates(area) {
+            if (locations.indexOf(area.node.id) > -1) {
+                area.mouseover(function () {
+                    document.body.style.cursor = "pointer";
+                    area.attr({ fill: hoverColor });
+                });
+                area.mouseout(function () {
+                    document.body.style.cursor = "default";
+                    area.attr({ fill: locationColor });
+                });
+            }
+        }
+
+        function colorizeArea(locations, area) {
+            if (locations.indexOf(area.node.id) > -1) {
+                area.attr({ fill: locationColor });
+            } else {
+                area.attr({ fill: dominantMapColor });
+            }
+        }
+
+        function setClickAction(area) {
+            if (locations.indexOf(area.node.id) > -1) {
+                area.mousedown(function () {
+                    console.log("Link to Oregon locations page")
+                });
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <h1>Playing with SnapSVG</h1>
+    <svg id="svg"></svg>
+</body>
+
+</html>
